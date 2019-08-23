@@ -1,27 +1,66 @@
+import "isomorphic-fetch";
+
 export default class extends React.Component {
-  render() {
-    return <div>
-      <h1>Hola mundo!</h1>
-      <img src="/static/granate.png" alt="granate"/>
-      <p>Todos en el curso de Next.js</p>
+	static async getInitialProps() {
+		let req = await fetch("https://api.audioboom.com/channels/recommended");
+		let { body: channels } = await req.json();
 
-      <style jsx>{`
-      h1 {
-        color: red;
-      }
-      p {
-        color: green;
-      }
-      body {
-        background: yellow;
-      }
-      `}</style>
+		return { channels };
+	}
+	render() {
+		const { channels } = this.props;
+		// const channels = this.props.channels
+		return (
+			<div>
+				<header>Podcasts</header>
+				<div className="channels">
+					{channels.map(channel => (
+						<div className="channel">
+							<img src={channel.urls.logo_image.original} alt="" />
+							<h2>{channel.title}</h2>
+						</div>
+					))}
+				</div>
 
-      {/* <style jsx global>{`
-      body {
-        background: yellow;        
-      }
-      `}</style> */}
-    </div> 
-  }
+				<style jsx>{`
+					header {
+						color: #fff;
+						background: #8756ca;
+						padding: 15px;
+						text-align: center;
+					}
+					.channel {
+						display: block;
+						border-radius: 3px;
+						box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+						margin-bottom: 0.5em;
+          }
+          .channels {
+            display: grid;
+            grid-gap: 15px;
+            padding: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          }
+					.channel img {
+						width: 100%;
+					}
+					h2 {
+						padding: 5px;
+						font-size: 0.9em;
+						font-weight: 600;
+						margin: 0;
+						text-align: center;
+					}
+				`}</style>
+
+				<style jsx global>{`
+					body {
+            margin: 0
+            font-family: system-ui;
+            background: white;
+					}
+				`}</style>
+			</div>
+		);
+	}
 }
