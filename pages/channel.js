@@ -1,11 +1,12 @@
+import Link from 'next/link'
+
 export default class extends React.Component {
 	static async getInitialProps({ query }) {
 		let idChannel = query.id;
-
 		let [reqChannel, reqSeries, reqAudios] = await Promise.all([
 			fetch(`https://api.audioboom.com/channels/${idChannel}`),
-			fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`),
 			fetch(`https://api.audioboom.com/channels/${idChannel}/child_channels`),
+			fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`),
 		])
 
 		let dataChannel = await reqChannel.json();
@@ -33,7 +34,14 @@ export default class extends React.Component {
 
         <h2>Ultimos Podcasts</h2>
         { audioClips.map((clip) => (
-          <div>{ clip.title }</div>
+					<Link href={`/podcast?id=${clip.id}`} prefetch key={clip.id}>
+						<a className='posdcast'>
+							<h3>{ clip.title }</h3>
+							<div className="meta">
+								{ Math.ceil(clip.duration / 60) } minutes
+							</div>
+						</a>
+					</Link>
         ))}
 
 				<style jsx>{`
