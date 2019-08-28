@@ -1,4 +1,6 @@
 import Link from "next/link";
+import PodcastGrid from "../components/PodcastGrid";
+import ChannelGrid from "../components/ChannelGrid";
 
 export default class extends React.Component {
 	static async getInitialProps({ query }) {
@@ -28,7 +30,6 @@ export default class extends React.Component {
 		return (
 			<div>
 				<header>Podcasts</header>
-
 				<div
 					className="banner"
 					style={{
@@ -41,30 +42,12 @@ export default class extends React.Component {
 				{series.length > 0 && (
 					<div>
 						<h2>Series</h2>
-						<div className="channels">
-							{series.map(serie => (
-								<Link href={`/channel?id=${serie.id}`} prefetch>
-									<a className="channel">
-										<img src={serie.urls.logo_image.original} alt="" />
-										<h2>{serie.title}</h2>
-									</a>
-								</Link>
-							))}
-						</div>
+						<ChannelGrid channels={series} />
 					</div>
 				)}
 
 				<h2>Ultimos Podcasts</h2>
-				{audioClips.map(clip => (
-					<Link href={`/podcast?id=${clip.id}`} prefetch key={clip.id}>
-						<a className="podcast">
-							<h3>{clip.title}</h3>
-							<div className="meta">
-								{Math.ceil(clip.duration / 60)} minutes
-							</div>
-						</a>
-					</Link>
-				))}
+				<PodcastGrid audioClips={audioClips}></PodcastGrid>
 
 				<style jsx>{`
 					header {
@@ -109,26 +92,6 @@ export default class extends React.Component {
 						font-weight: 600;
 						margin: 0;
 						text-align: center;
-					}
-
-					.podcast {
-						display: block;
-						text-decoration: none;
-						color: #333;
-						padding: 15px;
-						border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-						cursor: pointer;
-					}
-					.podcast:hover {
-						color: #000;
-					}
-					.podcast h3 {
-						margin: 0;
-					}
-					.podcast .meta {
-						color: #666;
-						margin-top: 0.5em;
-						font-size: 0.8em;
 					}
 				`}</style>
 
