@@ -3,6 +3,13 @@ import Layout from "../components/Layout";
 import ChannelGrid from "../components/ChannelGrid";
 import Error from './_error'
 
+// Nuestra  estructuras de postcad
+// /podcast/un-buen-dia
+// /channel/posta
+// /channel
+// /
+
+
 export default class extends React.Component {
 	static async getInitialProps({ res }) {
 		try{
@@ -16,7 +23,7 @@ export default class extends React.Component {
 	}
 	render() {
 		const { channels, statusCode } = this.props;
-		
+
 		if ( statusCode !== 200 ) {
 			return <Error statusCode={ statusCode }/>
 		}
